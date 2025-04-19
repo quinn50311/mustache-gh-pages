@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+        <title>六線譜</title>
+    </head>
+    <style>
+        html,
+        body {
+            max-width: 768px;
+            max-height: 1024px;
+        }
+
+        .container {
+            max-width: 768px;
+            max-height: 1024px;
+            width: 768px;
+            height: 1024px;
+            position: relative;
+
+            & img {
+                width: 100%;
+                height: 100%;
+                vertical-align: middle;
+            }
+        }
+    </style>
+    <body>
+        <div class="container">
+            <img
+                src="background.jpg"
+                alt="六線譜"
+            />
+        </div>
+    </body>
+    <script>
+        const container = document.querySelector('.container');
+        let counter = 'N';
+        let width = 132;
+        let height = 115;
+        let count = 1;
+        let lineCount = 1;
+
+        const btn = document.createElement('button');
+        btn.className = 'submitBtn';
+
+        btn.style.position = 'absolute';
+        btn.style.left = 305 + 'px';
+        btn.style.top = 930 + 'px';
+        btn.style.width = 190 + 'px';
+        btn.style.height = 45 + 'px';
+        btn.style.backgroundColor = 'inherit';
+        btn.style.border = 'none';
+        btn.style.listStyle = 'none';
+
+        btn.addEventListener('click', (e) => {
+            for (let i = 0; i < 384; i++) {
+                const inputEl = document.querySelector(`.note${i}`);
+                if (inputEl.value === 'N') {
+                    inputEl.value = null;
+                    inputEl.dispatchEvent(new Event('change'));
+                }
+            }
+        });
+
+        container.appendChild(btn);
+
+        for (let i = 0; i < 384; i++) {
+            const note = document.createElement('input');
+
+            note.className = `note${i}`;
+            note.style.position = 'absolute';
+
+            note.style.display = 'block';
+            note.style.width = '10px';
+            note.style.height = '10px';
+            note.style.border = 'none';
+            note.style.color = '#bbb';
+
+            note.style.left = width + 'px';
+            note.style.top = height + 'px';
+            note.style.zIndex = '9999';
+
+            note.textContent = counter;
+            note.value = counter;
+
+            note.addEventListener('change', (e) => {
+                if (!e.target.value) {
+                    e.target.style.backgroundColor = 'inherit';
+                } else if (e.target.value !== 'N') {
+                    e.target.style.backgroundColor = 'white';
+                    e.target.style.color = 'black';
+                }
+            });
+
+            note.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
+            if (count % 8 !== 0) width += 70.5;
+            else {
+                width = 132;
+
+                if (lineCount % 6 !== 0) height += 14;
+                else height += 32.5;
+
+                lineCount++;
+            }
+
+            count++;
+
+            container.appendChild(note);
+        }
+    </script>
+</html>
